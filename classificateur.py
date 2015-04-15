@@ -10,68 +10,52 @@ def workForFiles(path, filter, callback):
         file =  os.path.join(path, f)
         callback(file)
 
-
+def calculSum(dicFile, dicProba):
+    res = 1
+    for word, count in dicFile.items():
+        if word in dicProba:
+            res *= math.pow(dicProba[word], count)
+    return res
+def testFile(file, nb, probaPos, probaNeg):
+    tos = {
+        True : "pos",
+        False : "neg"
+    }
+    dic = {}
+    openFile.traiteFichier(file, dic)
+    sumPos = calculSum(dic, probaPos) * 100
+    sumNeg = calculSum(dic, probaNeg) * 100
+    res = tos[sumPos > sumNeg]
+    ok = res in file
+    nb[ok] += 1
+    print("Result for %s %s : %g%%+ %g%%-" % (file, res, sumPos, sumNeg))
 
 def classifie():
     pass
     dicPos = {}
     dicNeg = {}
-    tos = {
-        True : "pos",
-        False : "neg"
-    }
+
 
     pathPos = "data/tagged/tagged/pos"
     pathNeg = "data/tagged/tagged/neg"
 
-    trains = (
-        (pathPos, selectRandom.isTrainPos, dicPos),
-        (pathNeg, selectRandom.isTrainNeg, dicNeg)
-    )
-    for t in trains:
-        path = t[0]
-        filter = t[1]
-        dic = t[2]
-        workForFiles(path, filter, lambda file: openFile.traiteFichier(file, dic))
-
+    workForFiles(pathPos, selectRandom.isTrainPos, lambda file: openFile.traiteFichier(file, dicPos))
+    workForFiles(pathNeg, selectRandom.isTrainNeg, lambda file: openFile.traiteFichier(file, dicNeg))
 
     probaPos = openFile.dictToProba(dicPos)
     probaNeg = openFile.dictToProba(dicNeg)
 
-    def calculSum(dicFile, dicProba):
-        res = 1
-        for word, count in dicFile.items():
-            if word in dicProba:
-                res *= math.pow(dicProba[word], count)
-
-        return res
     nb = {
         True:0,
         False:0
     }
-    def testFile(file):
-        global nbOk
-        global nbKo
-        dic = {}
-        openFile.traiteFichier(file, dic)
-        sumPos = calculSum(dic, probaPos) * 100
-        sumNeg = calculSum(dic, probaNeg) * 100
-        res = tos[sumPos > sumNeg]
-        ok =  res in file
-        nb[ok] += 1
-        print("Result for %s %s : %g%%+ %g%%-" % (file, res, sumPos, sumNeg))
 
-    tests = (
-        (pathPos, selectRandom.isTestPos),
-        (pathNeg, selectRandom.isTestNeg)
-    )
-    for t in tests:
-        path = t[0]
-        filter = t[1]
-        workForFiles(path, filter, testFile)
+    workForFiles(pathPos, selectRandom.isTestPos, lambda file: testFile(file, nb, probaPos, probaNeg))
+    workForFiles(pathNeg, selectRandom.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg))
 
 
     print("nb", nb)
+    print("rate %f%%" %(100.0 * nb[True] / float(nb[True] + nb[False])))
 
 if __name__ == "__main__":
     classifie()
