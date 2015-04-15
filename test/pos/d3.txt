@@ -1,0 +1,5 @@
+bomb	NOM	bomb
+music	NOM	music
+music	NOM	music
+movie	NOM	movie
+TV	NOM	TV

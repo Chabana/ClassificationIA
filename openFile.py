@@ -1,6 +1,6 @@
 __author__ = 'Jules'
 
-acceptType = ("VER", "NOM", "ADV")
+acceptType = ("VER", "NOM", "ADV", "ADJ") # INT
 import codecs
 def traiteFichier(path, dict):
     with codecs.open(path, "r", "utf-8") as file:
@@ -15,11 +15,17 @@ def traiteFichier(path, dict):
                     else:
                         dict[mot] = 1
 
-def dictToProba(dict):
+def dictToProba(dict, words):
     nbTot = sum(dict.values())
-    div = float(nbTot + len(dict))
-    return {key: (value + 1) / div for key, value in dict.items()}
+    print("nbTot %d" % nbTot)
+    div = float(nbTot + len(words))
+    print("div %d" % div)
+    return {key: (valOr0(dict, key) + 1) / div for key in words}
 
+def valOr0(dict, key):
+    if key in dict:
+        return dict[key]
+    return 0
 
 
 if __name__ == "__main__":

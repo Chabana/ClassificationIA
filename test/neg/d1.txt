@@ -1,0 +1,3 @@
+kill	NOM	kill
+bomb	NOM	bomb
+kidnap	NOM	kidnap

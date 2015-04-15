@@ -1,0 +1,5 @@
+kill	NOM	kill
+bomb	NOM	bomb
+kidnap	NOM	kidnap
+kidnap	NOM	kidnap
+movie	NOM	movie

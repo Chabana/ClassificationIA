@@ -28,7 +28,8 @@ def testFile(file, nb, probaPos, probaNeg):
     res = tos[sumPos > sumNeg]
     ok = res in file
     nb[ok] += 1
-    print("Result for %s %s : %g%%+ %g%%-" % (file, res, sumPos, sumNeg))
+    if not ok:
+        print("Result for %s %s : %g%%+ %g%%-" % (file, res, sumPos, sumNeg))
 
 def classifie():
     pass
@@ -38,18 +39,35 @@ def classifie():
 
     pathPos = "data/tagged/tagged/pos"
     pathNeg = "data/tagged/tagged/neg"
+    #pathPos = "test/pos"
+    #pathNeg = "test/neg"
+    #selectRandom.isTrainNeg = selectRandom.isTrainPos = lambda file : True
+    #selectRandom.isTestNeg = selectRandom.isTestPos = lambda file : True
 
     workForFiles(pathPos, selectRandom.isTrainPos, lambda file: openFile.traiteFichier(file, dicPos))
     workForFiles(pathNeg, selectRandom.isTrainNeg, lambda file: openFile.traiteFichier(file, dicNeg))
 
-    probaPos = openFile.dictToProba(dicPos)
-    probaNeg = openFile.dictToProba(dicNeg)
+    print("dicPos %s" % repr(dicPos))
+    print("dicNeg %s" % repr(dicNeg))
+
+    words = list(dicPos.keys())
+    words.extend(x for x in dicNeg.keys() if x not in words)
+    words.sort()
+
+    print("words %s" % repr(words))
+
+    print("pos")
+    probaPos = openFile.dictToProba(dicPos, words)
+    print("neg")
+    probaNeg = openFile.dictToProba(dicNeg, words)
+    print("probaPos %s" % repr(probaPos))
+    print("probaNeg %s" % repr(probaNeg))
 
     nb = {
         True:0,
         False:0
     }
-
+    #pathNeg = "test"
     workForFiles(pathPos, selectRandom.isTestPos, lambda file: testFile(file, nb, probaPos, probaNeg))
     workForFiles(pathNeg, selectRandom.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg))
 

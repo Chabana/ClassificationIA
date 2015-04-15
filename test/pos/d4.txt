@@ -1,0 +1,3 @@
+kidnap	NOM	kidnap
+music	NOM	music
+movie	NOM	movie
