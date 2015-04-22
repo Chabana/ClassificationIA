@@ -1,7 +1,6 @@
-__author__ = 'Jules'
+import codecs
 
 acceptType = ("VER", "NOM", "ADV", "ADJ")
-import codecs
 
 def traiteFichierTagged(path, dict):
     with codecs.open(path, "r", "utf-8") as file:

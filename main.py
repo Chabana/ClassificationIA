@@ -1,4 +1,3 @@
-__author__ = 'Jules'
 import openFile
 
 import os
