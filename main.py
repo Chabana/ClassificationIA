@@ -47,15 +47,15 @@ class Mode(enum.Enum):
     NORMAL_EXCLUSION = 2,
 
 def main():
-    import selectRandom
+    import fileSelector
     n = 10
     rates = {mode: 0 for mode in Mode}
     times = {mode: 0 for mode in Mode}
     useBloc = True
     if useBloc:
-        fct = selectRandom.createBlockSelectors
+        fct = fileSelector.createBlockSelectors
     else:
-        fct = selectRandom.createRandomSelectors
+        fct = fileSelector.createRandomSelectors
 
     for selector in fct(n):
         for mode in Mode:
