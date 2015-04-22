@@ -48,10 +48,16 @@ class Mode(enum.Enum):
 
 def main():
     import selectRandom
-    n = 5
+    n = 10
     rates = {mode: 0 for mode in Mode}
     times = {mode: 0 for mode in Mode}
-    for i in range(5):
+    useBloc = True
+    if useBloc:
+        fct = selectRandom.createBlockSelectors
+    else:
+        fct = range
+
+    for i in fct(n):
         selector = selectRandom.SelectFileRandom()
         for mode in Mode:
             rate, time =  classifie(mode, selector)
