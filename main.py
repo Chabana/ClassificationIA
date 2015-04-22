@@ -115,4 +115,7 @@ def classifie(mode, fileSelector):
     return rate, elapsed
 
 if __name__ == "__main__":
+    import sys
+    if sys.version_info < (3, 4):
+        raise Exception("must use python 3.4 or greater")
     main()
