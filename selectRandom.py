@@ -3,7 +3,7 @@ import random
 nbFiles = 1000
 prop = 0.2
 
-class SelectFile:
+class FileSelector:
     def __init__(self, tabPos, tabNeg):
         self.__tabPos = tabPos
         self.__tabNeg = tabNeg
@@ -18,7 +18,7 @@ class SelectFile:
     def isInTab(self, name, tab):
         return len([f for f in tab if name.endswith(f)]) > 0
 
-class SelectFileRandom(SelectFile):
+class FileSelectorRandom(FileSelector):
     def __init__(self):
         super().__init__(createRandom(nbFiles, prop), createRandom(nbFiles, prop))
 
@@ -50,11 +50,15 @@ def generateBloc(n):
     random.shuffle(x)
     return [x[i* nbPerBloc:(i+1) * nbPerBloc] for i in range(n)]
 
+def createRandomSelectors(n):
+    for i in range(n):
+        yield FileSelectorRandom()
+
 def createBlockSelectors(n):
     blocsPos =generateBloc(n)
     blocsNeg =generateBloc(n)
     for i in range(n):
-        yield SelectFile(blocsPos[i], blocsNeg[i])
+        yield FileSelector(blocsPos[i], blocsNeg[i])
 
 
 
@@ -62,7 +66,7 @@ TabNeg = ('-0004.txt', '-0012.txt', '-0015.txt', '-0018.txt', '-0024.txt', '-003
 TabPos = ('-0007.txt', '-0020.txt', '-0024.txt', '-0039.txt', '-0040.txt', '-0041.txt', '-0046.txt', '-0060.txt', '-0068.txt', '-0074.txt', '-0075.txt', '-0078.txt', '-0081.txt', '-0084.txt', '-0086.txt', '-0088.txt', '-0089.txt', '-0107.txt', '-0108.txt', '-0109.txt', '-0110.txt', '-0115.txt', '-0118.txt', '-0119.txt', '-0121.txt', '-0128.txt', '-0134.txt', '-0135.txt', '-0136.txt', '-0142.txt', '-0144.txt', '-0148.txt', '-0152.txt', '-0155.txt', '-0157.txt', '-0168.txt', '-0170.txt', '-0182.txt', '-0188.txt', '-0195.txt', '-0200.txt', '-0205.txt', '-0209.txt', '-0213.txt', '-0230.txt', '-0236.txt', '-0243.txt', '-0246.txt', '-0248.txt', '-0257.txt', '-0259.txt', '-0260.txt', '-0271.txt', '-0282.txt', '-0284.txt', '-0287.txt', '-0298.txt', '-0302.txt', '-0303.txt', '-0305.txt', '-0309.txt', '-0316.txt', '-0319.txt', '-0328.txt', '-0335.txt', '-0336.txt', '-0341.txt', '-0342.txt', '-0350.txt', '-0365.txt', '-0369.txt', '-0370.txt', '-0372.txt', '-0377.txt', '-0381.txt', '-0383.txt', '-0384.txt', '-0391.txt', '-0393.txt', '-0394.txt', '-0396.txt', '-0414.txt', '-0416.txt', '-0428.txt', '-0438.txt', '-0443.txt', '-0451.txt', '-0452.txt', '-0458.txt', '-0460.txt', '-0465.txt', '-0474.txt', '-0477.txt', '-0482.txt', '-0483.txt', '-0484.txt', '-0490.txt', '-0493.txt', '-0500.txt', '-0502.txt', '-0504.txt', '-0519.txt', '-0521.txt', '-0534.txt', '-0548.txt', '-0549.txt', '-0553.txt', '-0556.txt', '-0558.txt', '-0563.txt', '-0565.txt', '-0568.txt', '-0569.txt', '-0570.txt', '-0572.txt', '-0575.txt', '-0579.txt', '-0581.txt', '-0583.txt', '-0586.txt', '-0597.txt', '-0615.txt', '-0633.txt', '-0635.txt', '-0638.txt', '-0644.txt', '-0650.txt', '-0656.txt', '-0669.txt', '-0670.txt', '-0672.txt', '-0673.txt', '-0678.txt', '-0692.txt', '-0697.txt', '-0702.txt', '-0708.txt', '-0716.txt', '-0720.txt', '-0731.txt', '-0732.txt', '-0736.txt', '-0740.txt', '-0747.txt', '-0751.txt', '-0755.txt', '-0759.txt', '-0761.txt', '-0764.txt', '-0768.txt', '-0778.txt', '-0780.txt', '-0787.txt', '-0789.txt', '-0793.txt', '-0798.txt', '-0811.txt', '-0812.txt', '-0817.txt', '-0827.txt', '-0828.txt', '-0833.txt', '-0835.txt', '-0840.txt', '-0847.txt', '-0849.txt', '-0857.txt', '-0868.txt', '-0882.txt', '-0883.txt', '-0885.txt', '-0888.txt', '-0890.txt', '-0894.txt', '-0897.txt', '-0901.txt', '-0903.txt', '-0904.txt', '-0908.txt', '-0910.txt', '-0922.txt', '-0924.txt', '-0925.txt', '-0928.txt', '-0929.txt', '-0930.txt', '-0931.txt', '-0935.txt', '-0938.txt', '-0941.txt', '-0942.txt', '-0950.txt', '-0958.txt', '-0963.txt', '-0970.txt', '-0974.txt', '-0977.txt', '-0985.txt', '-0986.txt', '-0988.txt')
 
 
-class SelectFileDeterminist(SelectFile):
+class FileSelectorDeterminist(FileSelector):
     def __init__(self):
         super().__init__(TabPos, TabNeg)
 

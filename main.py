@@ -55,10 +55,9 @@ def main():
     if useBloc:
         fct = selectRandom.createBlockSelectors
     else:
-        fct = range
+        fct = selectRandom.createRandomSelectors
 
-    for i in fct(n):
-        selector = selectRandom.SelectFileRandom()
+    for selector in fct(n):
         for mode in Mode:
             rate, time =  classifie(mode, selector)
             rates[mode] += rate
@@ -82,7 +81,7 @@ traiteFichiers = {
     Mode.NORMAL_EXCLUSION : lambda file, dic: openFile.traiterFicherNormal(file, dic, openFile.loadExclusion())
 }
 
-def classifie(mode, selectRandom):
+def classifie(mode, fileSelector):
     initTime = time.time()
     dicPos = {}
     dicNeg = {}
@@ -92,8 +91,8 @@ def classifie(mode, selectRandom):
 
     traiteFichier = traiteFichiers[mode]
 
-    workForFiles(pathPos, selectRandom.isTrainPos, lambda file: traiteFichier(file, dicPos))
-    workForFiles(pathNeg, selectRandom.isTrainNeg, lambda file: traiteFichier(file, dicNeg))
+    workForFiles(pathPos, fileSelector.isTrainPos, lambda file: traiteFichier(file, dicPos))
+    workForFiles(pathNeg, fileSelector.isTrainNeg, lambda file: traiteFichier(file, dicNeg))
 
     words = list(dicPos.keys())
     words.extend(x for x in dicNeg.keys() if x not in words)
@@ -107,8 +106,8 @@ def classifie(mode, selectRandom):
         False:0
     }
 
-    workForFiles(pathPos, selectRandom.isTestPos, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
-    workForFiles(pathNeg, selectRandom.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
+    workForFiles(pathPos, fileSelector.isTestPos, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
+    workForFiles(pathNeg, fileSelector.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
 
     rate = nb[True] / float(nb[True] + nb[False])
     elapsed = time.time() - initTime
