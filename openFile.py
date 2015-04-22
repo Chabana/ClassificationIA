@@ -1,8 +1,9 @@
 __author__ = 'Jules'
 
-acceptType = ("VER", "NOM", "ADV", "ADJ") # INT
+acceptType = ("VER", "NOM", "ADV", "ADJ")
 import codecs
-def traiteFichier(path, dict):
+
+def traiteFichierTagged(path, dict):
     with codecs.open(path, "r", "utf-8") as file:
         for line in file:
             split = line.split("\t")
@@ -15,23 +16,26 @@ def traiteFichier(path, dict):
                     else:
                         dict[mot] = 1
 
-def dictToProba(dict, words):
-    nbTot = sum(dict.values())
-    print("nbTot %d" % nbTot)
-    div = float(nbTot + len(words))
-    print("div %d" % div)
-    return {key: (valOr0(dict, key) + 1) / div for key in words}
+def traiterFicherNormal(path, dict, exclusion=[]):
+    with codecs.open(path, "r", "utf-8") as file:
+        for line in file:
+            line = line.replace("\n", "").replace("\r", "")
+            split = line.split(" ")
+            for mot in split:
+                if not mot in exclusion:
+                    if mot in dict:
+                        dict[mot] += 1
+                    else:
+                        dict[mot] = 1
 
-def valOr0(dict, key):
-    if key in dict:
-        return dict[key]
-    return 0
-
-
-if __name__ == "__main__":
-    d1 = {}
-    traiteFichier("data/tagged/tagged/neg/neg-0000.txt", d1)
-    print(d1)
-    print(dictToProba(d1))
-    test = {"kill": 4, "bomb":3, "kidnap":6, "music":0, "tv":1, "movie":1}
-    print(dictToProba(test))
+exclusions = None
+def loadExclusion():
+    global exclusions
+    if exclusions is None:
+        exclusions = []
+        with codecs.open("data/frenchST.txt", "r", "utf-8") as file:
+            for line in file:
+                exclusions.append(line.replace("\n", "").replace("\r", ""))
+        exclusions = tuple(exclusions)
+    return exclusions
+loadExclusion()
