@@ -102,11 +102,11 @@ class Result(enum.Enum):
 def main():
     import fileSelector
     #Nombre de fichier ou de part
-    n = 10
+    n = 5
     #tableaux
-    rates = {mode: 0 for mode in Mode}
+    rates = {mode: {result : 0 for result in Result} for mode in Mode}
     times = {mode: 0 for mode in Mode}
-    useBloc = True
+    useBloc = False
     if useBloc:
         fct = fileSelector.createBlockSelectors
     else:
@@ -115,13 +115,15 @@ def main():
     for selector in fct(n):
         for mode in Mode:
             rate, time =  classifie(mode, selector)
-            rates[mode] += rate
+            for result in Result:
+                rates[mode][result] += rate [result]
             times[mode] += time
 
     for mode in Mode:
-        rates[mode] /= n
+        for result in Result:
+            rates[mode][result] /= n
         times[mode] /= n
-        print("Mean %s : %f%% in %f seconds" % (mode.name, 100*rates[mode], times[mode]))
+        print("Mean %s : %s in %f seconds" % (mode.name, rates[mode], times[mode]))
 
 #dossier par type
 pathPase = {
@@ -175,12 +177,13 @@ def classifie(mode, fileSelector):
     workForFiles(pathNeg, fileSelector.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
 
     #calcule des résultats
-    rate = nb[Result.Ok] / float(sum([n for n in nb.values()]))
+    somme = float(sum([n for n in nb.values()]))
+    rates = {result : nb[result] / somme for result in Result}
     #temps passé
     elapsed = time.time() - initTime
     #resultat
-    print("rate %s %f%% in %f seconds (%s)" %(mode.name, 100.0 * rate, elapsed, nb))
-    return rate, elapsed
+    print("rate %s %f%% in %f seconds (%s) / (%s)" %(mode.name, 100.0 * rates[Result.Ok], elapsed, nb, rates))
+    return rates, elapsed
 
 if __name__ == "__main__":
     import sys
