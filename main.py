@@ -177,8 +177,9 @@ def classifie(mode, fileSelector):
     workForFiles(pathNeg, fileSelector.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
 
     #calcule des résultats
-    somme = float(sum([n for n in nb.values()]))
+    somme = float(sum([n for n in nb.values()]) / 2)
     rates = {result : nb[result] / somme for result in Result}
+    rates[Result.Ok] /= 2
     #temps passé
     elapsed = time.time() - initTime
     #resultat
