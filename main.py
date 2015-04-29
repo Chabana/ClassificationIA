@@ -73,7 +73,7 @@ def testFile(file, nb, probaPos, probaNeg, traiteFichier):
     #calcule les somme
     sumPos = calculSum(dic, probaPos)
     sumNeg = calculSum(dic, probaNeg)
-    #type déduit
+    #type dweuit
     res = tos[sumPos > sumNeg]
     #si bon type
     ok = res in file
@@ -94,10 +94,10 @@ class Mode(enum.Enum):
     NORMAL_EXCLUSION = 2,
 
 class Result(enum.Enum):
-    #type de résultat
+    #type de resultat
     Ok = 1,
-    NegAsPos = 2, #negatif classé positif
-    PosAsNeg = 3, #positif classé negatif
+    NegAsPos = 2, #negatif classe positif
+    PosAsNeg = 3, #positif classe negatif
 
 def main():
     import fileSelector
@@ -156,27 +156,27 @@ def classifie(mode, fileSelector):
     workForFiles(pathPos, fileSelector.isTrainPos, lambda file: traiteFichier(file, dicPos))
     workForFiles(pathNeg, fileSelector.isTrainNeg, lambda file: traiteFichier(file, dicNeg))
 
-    #recupération de la liste de tous les mots
+    #recuperation de la liste de tous les mots
     words = list(dicPos.keys())
     words.extend(x for x in dicNeg.keys() if x not in words)
     words.sort()
 
-    #calcule des probabilitées
+    #calcule des probabilitees
     probaPos = dictToProba(dicPos, words)
     probaNeg = dictToProba(dicNeg, words)
 
-    #dicitonnaire des résultats
+    #dicitonnaire des rÃ©sultats
     nb = {
         result : 0 for result in Result
     }
 
-    #calcule des résultats
+    #calcule des rÃ©sultats
     workForFiles(pathPos, fileSelector.isTestPos, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
     workForFiles(pathNeg, fileSelector.isTestNeg, lambda file: testFile(file, nb, probaPos, probaNeg, traiteFichier))
 
-    #calcule des résultats
+    #calcule des rÃ©sultats
     rate = nb[Result.Ok] / float(sum([n for n in nb.values()]))
-    #temps passé
+    #temps passÃ©
     elapsed = time.time() - initTime
     #resultat
     print("rate %s %f%% in %f seconds (%s)" %(mode.name, 100.0 * rate, elapsed, nb))

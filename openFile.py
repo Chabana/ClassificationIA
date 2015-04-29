@@ -3,6 +3,12 @@ import codecs
 acceptType = ("VER", "NOM", "ADV", "ADJ")
 
 def traiteFichierTagged(path, dict):
+    """
+    Ouvre le fichier tagués
+    :param path: path du fichier
+    :param dict: dicionnaire résultat
+    :return:
+    """
     with codecs.open(path, "r", "utf-8") as file:
         for line in file:
             split = line.split("\t")
@@ -16,6 +22,13 @@ def traiteFichierTagged(path, dict):
                         dict[mot] = 1
 
 def traiterFicherNormal(path, dict, exclusion=[]):
+    """
+    Ouvre un fichier normal
+    :param path: path du fichier
+    :param dict: dicionnaire résultat
+    :param exclusion: liste d'exlusion
+    :return:
+    """
     with codecs.open(path, "r", "utf-8") as file:
         for line in file:
             line = line.replace("\n", "").replace("\r", "")
@@ -29,6 +42,10 @@ def traiterFicherNormal(path, dict, exclusion=[]):
 
 exclusions = None
 def loadExclusion():
+    """
+    Charge la liste des mots a exclure
+    :return:
+    """
     global exclusions
     if exclusions is None:
         exclusions = []
