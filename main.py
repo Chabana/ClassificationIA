@@ -106,7 +106,9 @@ def main():
     #tableaux
     rates = {mode: {result : 0 for result in Result} for mode in Mode}
     times = {mode: 0 for mode in Mode}
-    useBloc = False
+    useBloc = True
+    modeTitle = "Blocs" if useBloc else "Aléatoire"
+    print("Mode de l'expérience: %s"%modeTitle)
     if useBloc:
         fct = fileSelector.createBlockSelectors
     else:
